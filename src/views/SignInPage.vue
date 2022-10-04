@@ -5,6 +5,7 @@
         <h1>Login to Your Account</h1>
       </template>
       <template #content>
+        <p class="error-msg" v-if="errMsg"> {{ errMsg }} </p>
         <span class="p-float-label">
           <InputText id="email" type="email" v-model="email" placeholder="Email"/>
           <label for="email">Email</label>
@@ -46,8 +47,20 @@ export default {
       })
 
       .catch(error => {
-        alert(error.message);
-        console.log(error.code)
+        switch (error.code) {
+          case 'auth/invalid-email':
+            this.errMsg = '*Invalid email'
+            break
+          case 'auth/user-not-found':
+            this.errMsg = '*No account with that email was found'
+            break
+          case 'auth/wrong-password':
+            this.errMsg = '*Incorrect password'
+            break  
+          default:
+            this.errMsg = '*Email or password was incorrect'
+            break
+        }
       })
     }
   }

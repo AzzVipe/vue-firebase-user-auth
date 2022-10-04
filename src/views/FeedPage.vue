@@ -1,5 +1,5 @@
 <template>
-	<h1>Feed</h1>
+	<h1>Your Feed, Only visible to users logged in, Can't be accessed without login</h1>
 </template>
 
 <script>
