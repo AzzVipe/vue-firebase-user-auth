@@ -1,30 +1,58 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <main class="container">
+    <nav class="navbar">
+      <MenuBar :model="items">
+        <template #end>
+          <MyButton v-if="isLoggedIn == true" @click="handleSignOut"> Logout </MyButton>
+        </template>
+      </MenuBar>
+    </nav>
+    <div class="content">
+      <router-view/>
+    </div>
+  </main>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-nav {
-  padding: 30px;
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+      items: [
+        {label: 'Home', icon: 'pi pi-fw pi-home', to: '/'},
+        {label: 'Feed', icon: 'pi pi-fw pi-calendar', to: '/feed', visible: () => this.isLoggedIn},
+        {label: 'About', icon: 'pi pi-fw pi-calendar', to: '/about'},
+        {label: 'Register', icon: 'pi pi-fw pi-pencil', to: '/register', visible: this.toShowTab},
+        {label: 'Sign In', icon: 'pi pi-fw pi-file', to: '/sign-in', visible: this.toShowTab},
+      ]
     }
-  }
-}
-</style>
+  },
+
+  mounted() {
+    onAuthStateChanged(getAuth(), user => {
+      if (user) {
+        this.isLoggedIn = true // if we have a user
+      } else {
+        this.isLoggedIn = false // if we do not
+      }
+    })    
+  },
+
+  methods: {
+    handleSignOut() {
+      signOut(getAuth())
+      this.$router.push('/')
+    },
+    toShowTab() {
+      if(this.isLoggedIn == true)
+        return false;
+
+      return true;
+    }   
+  },
+};
+
+</script>
