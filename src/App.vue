@@ -3,7 +3,13 @@
     <nav class="navbar">
       <MenuBar :model="items">
         <template #end>
-          <MyButton v-if="isLoggedIn == true" @click="handleSignOut"> Logout </MyButton>
+          <MyButton 
+            label="Sign Out" 
+            iconPos="right" 
+            class="p-button-sm" 
+            icon="pi pi-sign-out" 
+            v-if="isLoggedIn == true" 
+            @click="handleSignOut" /> 
         </template>
       </MenuBar>
     </nav>
@@ -26,7 +32,7 @@ export default {
         {label: 'Feed', icon: 'pi pi-fw pi-calendar', to: '/feed', visible: () => this.isLoggedIn},
         {label: 'About', icon: 'pi pi-fw pi-calendar', to: '/about'},
         {label: 'Register', icon: 'pi pi-fw pi-pencil', to: '/register', visible: this.toShowTab},
-        {label: 'Sign In', icon: 'pi pi-fw pi-file', to: '/sign-in', visible: this.toShowTab},
+        {label: 'Sign In', icon: 'pi pi-fw pi-sign-in', to: '/sign-in', visible: this.toShowTab},
       ]
     }
   },
